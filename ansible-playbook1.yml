@@ -1,0 +1,8 @@
+-
+  name: play on sample execution
+  hosts: node1
+  tasks:
+    - name: use case of yum module
+      yum:
+        name: git
+        state: present
