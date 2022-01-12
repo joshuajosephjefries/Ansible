@@ -1,0 +1,9 @@
+-
+  name: PB to install tree package
+  hosts: client1
+  tasks:
+    - name: use case of yum module
+      yum:
+        name: tree
+        state: present
+  become: yes
