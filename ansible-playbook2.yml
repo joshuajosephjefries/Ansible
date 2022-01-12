@@ -1,0 +1,16 @@
+-
+  name: play to install httpd
+  hosts: node1
+  tasks:
+    - name: use case of yum module
+      yum:
+        name: httpd
+        state: present
+-
+  name: play to start httpd
+  hosts: node1
+  tasks:
+    - name: use case of service module
+      service:
+        name: httpd
+        state: started
