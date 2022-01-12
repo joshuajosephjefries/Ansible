@@ -1,0 +1,12 @@
+-
+  name: playbook to remove docker
+  hosts: client1
+  tasks:
+   - name: code to remove docker
+     yum:
+        name: docker
+        state: absent
+
+   - name: code to reboot pc
+     reboot:
+      test_command: whoami
