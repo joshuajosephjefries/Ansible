@@ -1,0 +1,13 @@
+-
+  name: PB to install docker and start the docker
+  hosts: production_server, webserver
+  become: yes
+  tasks:
+    - name: code to install docker
+      yum:
+        name: docker
+        state: present
+    - name: start the docker service
+      service:
+        name:  docker
+        state: started
