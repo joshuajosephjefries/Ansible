@@ -1,0 +1,24 @@
+---
+- name: To install boto and botocore packages
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Using pip module
+    pip:
+      name: ["boto", "botocore"]
+      state: present
+
+- name: Terminate/Remove EC2 instance
+  hosts: webservers, production_server
+  gather_facts: False
+  tasks:
+    - name: Terminate/Remove EC2 instance
+      ec2:
+        key_name: Ponnuvel
+        instance_type: t2.micro
+        instance_ids: ["i-0c599ee5c1265127d", "i-01bb2b1296c33b365"]
+        image: ami-08e4e35cccc6189f4
+        aws_access_key: "{aws_access_key}"
+        aws_secret_key: "{aws_secret_key}"
+        state: absent
+        region: us-east-1
