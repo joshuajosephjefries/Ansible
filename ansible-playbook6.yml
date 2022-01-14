@@ -1,0 +1,42 @@
+---
+- name: To install pip on webservers and production_server
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Using yum module
+    yum:
+      name: pip
+      state: present
+
+- name: To install boto3 and botocore packages
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Using pip module
+    pip:
+      name: ["boto3", "botocore"]
+      state: present
+
+- name: PB to create AMI in the same region
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Creating AMI in us-east-1 region
+    community.aws.ec2_ami_copy:
+      source_image_id: ami-08e4e35cccc6189f4
+      aws_access_key: "{aws_access_key}"
+      aws_secret_key: "{aws_secret_key}"
+      source_region: us-east-1
+      region: us-east-1
+
+- name: PB to copy AMI between different zones
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: AMI Copy from one region to the other
+    community.aws.ec2_ami_copy:
+      source_image_id: ami-08e4e35cccc6189f4
+      aws_access_key: "{aws_access_key}"
+      aws_secret_key: "{aws_secret_key}"
+      source_region: us-east-1
+      region: us-east-2
