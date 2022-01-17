@@ -1,0 +1,13 @@
+-
+ name: pb to create a directory
+ hosts: all
+ tasks:
+   - name: ansible create directory
+     file:
+       path: /opt/usa
+       state: directory
+
+   - name: ansible create file
+     file:
+       path: /opt/usa/sample1.txt
+       state: touch
