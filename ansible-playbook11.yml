@@ -1,0 +1,41 @@
+-
+  name: Using yum module to install chocolatey
+  hosts: ansible_server
+  tasks:
+    - name: To install chocolatey
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install chocolatey.chocolatey
+
+    - name: To install win_powershell
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install ansible.windows
+
+    - name: Using pip module to install pywinrm
+      pip:
+        name: pywinrm
+        state: present
+
+-
+  name: PB to install adobereader
+  hosts: win_server
+  tasks:
+    - name: Using powershell to install winrm listener
+      ansible.windows.win_powershell:
+        script: |
+          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+          $url = "https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+          $file = "$env:temp\ConfigureRemotingForAnsible.ps1"
+          (New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)
+          powershell.exe -ExecutionPolicy ByPass -File $file
+          winrm enumerate winrm/config/Listener
+        # Refer https://docs.ansible.com/ansible/latest/user_guide/windows_setup.html
+
+    - name: Using the windows chocolatey module
+      win_chocolatey:
+        name: adobereader
+        state: present
+
+    - name: Microsoft Visual C thingy
+      win_chocolatey:
+        name: vscode
+        state: present
