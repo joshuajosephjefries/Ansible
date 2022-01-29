@@ -64,8 +64,8 @@
 
     - name: Creating EC2 instance
       ec2:
-        aws_access_key: "AKIAUVU2B7VCSZJEPAQQ"
-        aws_secret_key: "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"
+        aws_access_key: {{ aws_access_key }}
+        aws_secret_key: {{ aws_secret_key }}
         image: "{{ my_image }}"
         instance_type: "{{ my_instance_type }}"
         private_ip: "{{ my_private_ip }}"
