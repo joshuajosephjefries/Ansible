@@ -1,4 +1,4 @@
-# This PB installs a new windows ec2 instance by using the security group
+# This PB installs a new windows ec2 instance
 # Install ansible on your linux machine: yum install ansible
 # Make changes in the host file in /etc/ansible/hosts by adding localhost entry in the host file
 # Generate the access and secret key from IAM users
@@ -15,8 +15,8 @@
     my_image: ami-0aad84f764a2bd39a
     my_vpc_id: vpc-0bba96be7ff2002a0
     subnet_id: subnet-0c74ca62f066ae5b0
-    aws_access_key: "aws_access_key"
-    aws_secret_key: "aws_secret_key"
+    aws_access_key: {{Get_secret_key_from_IAM}}
+    aws_secret_key: {{Get_access_key_from_IAM}}
 
   tasks:
     - name: Installing pip module
@@ -33,39 +33,10 @@
       ansible.builtin.command:
         cmd: ansible-galaxy collection install amazon.aws
 
-    - name: Adding incoming and outgoing ports for win_ec2_security_group
-      ec2_group:
-        name: Creating ports for security group
-        description: Adding rules for default security group
-        group_id: "{{ win_ec2_security_group }}"
-        aws_access_key: {{ aws_access_key }}
-        aws_secret_key: {{ aws_secret_key }}
-        region: "{{my_aws_region}}"
-        vpc_id: "{{my_vpc_id}}"
-
-        rules:
-          - name: Allow all on ingress HTTP
-            proto: tcp
-            to_port: 80
-            from_port: 80
-            cidr: 0.0.0.0/0
-
-          - name: Allow all on ingress RDP
-            proto: tcp
-            to_port: 3389
-            from_port: 3389
-            cidr: 0.0.0.0/0
-
-          - name: Allow all on ingress WINRM
-            proto: tcp
-            to_port: 5896
-            from_port: 5896
-            cidr: 0.0.0.0/0
-
     - name: Creating EC2 instance
       ec2:
-        aws_access_key: {{ aws_access_key }}
-        aws_secret_key: {{ aws_secret_key }}
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
         image: "{{ my_image }}"
         instance_type: "{{ my_instance_type }}"
         private_ip: "{{ my_private_ip }}"
@@ -75,3 +46,5 @@
         wait: no
         vpc_subnet_id: "{{subnet_id}}"
         key_name: "{{ my_key_name }}"
+        instance_tags: {"Name": "Windows_Client"}
+        assign_public_ip: yes
