@@ -1,3 +1,11 @@
+# This playbook installs adobereader and visual C on remote windows instance using Ansible scripting
+# # Install ansible on your linux machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
 -
   name: Using yum module to install chocolatey
   hosts: ansible_server
@@ -35,7 +43,7 @@
         name: adobereader
         state: present
 
-    - name: Microsoft Visual C thingy
+    - name: Microsoft Visual Studio Code
       win_chocolatey:
         name: vscode
         state: present
