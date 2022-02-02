@@ -1,3 +1,10 @@
+# This playbook installs tree to view the directories in tree format
+# Install ansible on your linux machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
 -
   name: PB to install tree package
   hosts: client1
