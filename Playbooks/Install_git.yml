@@ -1,3 +1,8 @@
+# This playbook installs git on node1
+# Make sure you generate the ssh keygen and copy the key from server to client
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
 -
   name: play on sample execution
   hosts: node1
