@@ -1,0 +1,19 @@
+# This playbook removes docker and reboots the machine
+# Install ansible on your linux machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+-
+  name: playbook to remove docker
+  hosts: client1
+  tasks:
+   - name: code to remove docker
+     yum:
+        name: docker
+        state: absent
+
+   - name: code to reboot pc
+     reboot:
+      test_command: whoami
