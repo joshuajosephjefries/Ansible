@@ -7,8 +7,9 @@
 #! /bin/env bash
 #! PATH=$PATH:$HOME/.local/bin:$HOME/bin
 # <! DOCTYPE yaml>
+---
 -
-  name: PB to install Docker, Jenkins, Maven, Terraform, Kubernetes
+  name: PB to install Docker, Jenkins, Maven, Terraform, Chef
   hosts: linux
   become: yes
   tasks:
@@ -74,9 +75,88 @@
         var: result.stdout
 
     # MAVEN
+    - name: Installing repos for maven
+      command: sudo wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo
 
-    # Terraform
+    - name: Stream editor for filtering and transforming the text
+      command: sudo sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+
+    - name: Installing Apache MAVEN
+      command: sudo yum install -y apache-maven
+
+    - name: Checking the version of maven
+      shell: mvn -version
+      register: result
+
+    - name: Output of maven version
+      debug:
+        vars: result.stdout
+
+
+    # TERRAFORM
+    - name: Installing Utilities
+      command: yum install -y yum-utils
+
+    - name: Installing hashicorp repo
+      command: yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+
+    - name: Installing terraform
+      command: yum install terraform -y
+
+    - name: Check terraform version
+      shell: terraform -version
+      register: result
+
+    - name: Output of terraform version
+      debug:
+       vars: result.stdout
 
     # KUBERNETES
+    - name: Downloading the kubectl
+      command: curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
 
-    #
+    - name: Downloading the checksum file
+      command: curl -LO "https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl.sha256"
+
+    - name: Validating the output
+      command: echo "$(<kubectl.sha256)  kubectl" | sha256sum --check
+      register: var
+
+    - name: Checking the output of validation
+      debug:
+        var: var.stdout
+
+    - name: Install kubectl
+      command: sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
+    - name: Check the version
+      command: kubectl version --client
+
+    # CHEF
+
+    - name: Downloading Chef Infra
+      command: wget https://packages.chef.io/files/stable/chef-workstation/22.1.778/amazon/2/chef-workstation-22.1.778-1.el7.x86_64.rpm
+
+    - name: Installing Chef Infra
+      command: yum install chef-workstation-22.1.778-1.el7.x86_64.rpm -y
+
+    - name: Check chef package
+      shell: which chef
+      register: result
+
+    - name: print chef package output
+      debug:
+        var: result.stdout
+
+    # ANSIBLE
+
+    - name: Installing ansible
+      command: yum install ansible -y
+
+    - name: Check ansible package
+      shell: ansible --version
+      register: result
+
+    - name: print chef package output
+      debug:
+        var: result.stdout
