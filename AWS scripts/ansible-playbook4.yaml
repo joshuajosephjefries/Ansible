@@ -1,4 +1,4 @@
-# This playbook removes ec2 instance
+# This playbook removes ec2 instance from AWS
 # Install ansible on your ansible server machine: yum install ansible
 # Make changes in the host file in /etc/ansible/hosts by adding instance details of host
 # Generate the access and secret key from IAM users
