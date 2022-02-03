@@ -1,4 +1,4 @@
-# This playbook is to install linux instance with SSH wait_for_connection and newly created security group
+# This playbook is to install linux instance with SSH wait_for_connection and newly created security group on AWS
 # Install ansible on your linux machine: yum install ansible
 # Make changes in the host file in /etc/ansible/hosts by adding instance details
 # Generate the access and secret key from IAM users
