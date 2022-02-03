@@ -1,4 +1,4 @@
-# This playbook creates a test VPC
+# This playbook creates a test VPC on AWS
 # Install ansible on your linux machine: yum install ansible
 # Make changes in the host file in /etc/ansible/hosts by adding instance details
 # Generate the access and secret key from IAM users
