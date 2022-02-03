@@ -1,5 +1,5 @@
 # This playbook installs jenkins on remote AWS instance
-# Copy the ssh key from the ansible-server to the ansible-client
+# Copy the ssh key from the ansible-server to the ansible-client.
 # Go to /.ssh folder in server and generate ssh-keygen. Go to /root/.ssh and find the id_rsa.pub key
 # Copy the pub key and go to /.ssh/authorized_key of the client and the server
 # Make sure you add the hosts details in /etc/ansible/hosts
