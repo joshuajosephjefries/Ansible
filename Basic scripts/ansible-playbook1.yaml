@@ -1,4 +1,4 @@
-# This playbook installs git on node1
+# This playbook installs git on node1.
 # Install ansible on your ansible server machine: yum install ansible
 # Make changes in the host file in /etc/ansible/hosts by adding instance details of host
 
