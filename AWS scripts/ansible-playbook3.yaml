@@ -26,8 +26,8 @@
         key_name: Ponnuvel
         instance_type: t2.micro
         image: ami-08e4e35cccc6189f4
-        aws_access_key: "AKIAUVU2B7VCSK4LYDMA"
-        aws_secret_key: "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"
+        aws_access_key: "{{Get_access_key_from_IAM}}"
+        aws_secret_key: "{{Get_secret_key_from_IAM}}"
         wait: true
         region: us-east-1
 
