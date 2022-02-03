@@ -1,0 +1,34 @@
+# This playbook removes ec2 instance
+# Install ansible on your ansible server machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details of host
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <!DOCTYPE yaml>
+
+---
+- name: To install boto and botocore packages
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Using pip module
+    pip:
+      name: ["boto", "botocore"]
+      state: present
+
+- name: Create an EC2 instance
+  hosts: webservers, production_server
+  gather_facts: False
+  tasks:
+    - name: Launch instance
+      ec2:
+        key_name: Ponnuvel
+        instance_type: t2.micro
+        instance_ids: ["i-0c599ee5c1265127d", "i-01bb2b1296c33b365"]
+        image: ami-08e4e35cccc6189f4
+        aws_access_key: "AKIAUVU2B7VCTU5YREZF"
+        aws_secret_key: "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"
+        state: absent
+        region: us-east-1

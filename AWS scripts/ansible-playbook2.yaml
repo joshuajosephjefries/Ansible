@@ -1,0 +1,47 @@
+# This playbook creates AMI in and between regions
+# Install ansible on your ansible server machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details of host
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <!DOCTYPE yaml>
+
+---
+- name: To install pip on webservers and production_server
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Using yum module
+    yum:
+      name: pip
+      state: present
+
+- name: To install boto3 and botocore packages
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Using pip module
+    pip:
+      name: ["boto3", "botocore"]
+      state: present
+
+- name: PB to copy AMI between different zones
+  become: yes
+  hosts: webservers, production_server
+  tasks:
+  - name: Creating AMI
+    community.aws.ec2_ami_copy:
+      source_image_id: ami-08e4e35cccc6189f4
+      aws_access_key: "{{Get_access_key_from_IAM}}"
+      aws_secret_key: "{{Get_secret_key_from_IAM}}"
+      source_region: us-east-1
+      region: us-east-1
+  - name: Creating AMI
+    community.aws.ec2_ami_copy:
+      source_image_id: ami-08e4e35cccc6189f4
+      aws_access_key: "{{Get_access_key_from_IAM}}"
+      aws_secret_key: "{{Get_secret_key_from_IAM}}"
+      source_region: us-east-1
+      region: us-east-2

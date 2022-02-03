@@ -1,0 +1,82 @@
+# This playbook is to install all devops applications on remote linux instance
+# Copy the ssh key from the ansible-server to the ansible-client
+# Go to /.ssh folder in server and generate ssh-keygen. Go to /root/.ssh and find the id_rsa.pub key
+# Copy the pub key and go to /.ssh/authorized_key of the client and the server
+# Make sure you add the hosts details in /etc/ansible/hosts
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <! DOCTYPE yaml>
+-
+  name: PB to install Docker, Jenkins, Maven, Terraform, Kubernetes
+  hosts: linux
+  become: yes
+  tasks:
+
+    # DOCKER
+    - name: Installing docker
+      yum:
+        name: docker
+        state: present
+    - name: Starting docker Service
+      service:
+        name: docker
+        state: started
+
+    # JENKINS
+    - name: Download Long Term Jenkins release
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+        validate_certs: false
+
+    - name: Import jenkins key from url
+      ansible.builtin.rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+    - name: yum update
+      yum:
+        name: '*'
+        state: latest
+
+    - name: install epel-release
+      command: "amazon-linux-extras install epel -y"
+
+    - name: Install java
+      yum:
+        name: java-1.8.0-openjdk-devel
+        state: present
+
+    - name: Install jenkins
+      command: "yum install --skip-broken jenkins-2.319.2-1.1.noarch -y"
+
+    - name: daemon-reload to pick up config changes
+      ansible.builtin.systemd:
+        daemon_reload: yes
+
+    - name: Start jenkins
+      ansible.builtin.systemd:
+        name: jenkins
+        state: started
+
+    - name: sleep for 30 seconds and continue with play
+      wait_for: timeout=30
+      delegate_to: localhost
+
+    - name: init password jenkins
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+      changed_when: false
+      register: result
+
+    - name: print init password jenkins
+      debug:
+        var: result.stdout
+
+    # MAVEN
+
+    # Terraform
+
+    # KUBERNETES
+
+    #

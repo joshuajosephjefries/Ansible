@@ -1,0 +1,53 @@
+# This playbook installs windows ec2 instance
+# Install ansible on your linux machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+-
+  name: PB to create windows ec2 instance
+  hosts: localhost
+  vars:
+    win_ec2_security_group: sg-0181f26ba33c0c4ee
+    my_private_ip: 172.31.12.12
+    my_aws_region: us-east-1
+    my_instance_type: t2.micro
+    my_key_name: Ponnuvel
+    my_image: ami-0aad84f764a2bd39a
+    my_vpc_id: vpc-0bba96be7ff2002a0
+    subnet_id: subnet-0c74ca62f066ae5b0
+    aws_access_key: {{Get_secret_key_from_IAM}}
+    aws_secret_key: {{Get_access_key_from_IAM}}
+
+  tasks:
+    - name: Installing pip module
+      yum:
+        name: pip
+        state: present
+
+    - name: Installing boto, botocore and boto3 modules
+      pip:
+        name: ["boto", "botocore", "boto3"]
+        state: present
+
+    - name: Installing amazon aws module
+      ansible.builtin.command:
+        cmd: ansible-galaxy collection install amazon.aws
+
+    - name: Creating EC2 instance
+      ec2:
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        image: "{{ my_image }}"
+        instance_type: "{{ my_instance_type }}"
+        private_ip: "{{ my_private_ip }}"
+        region: "{{ my_aws_region }}"
+        state: present
+        count: 1
+        wait: no
+        vpc_subnet_id: "{{subnet_id}}"
+        key_name: "{{ my_key_name }}"
+        instance_tags: {"Name": "Windows_Client"}
+        assign_public_ip: yes

@@ -1,0 +1,47 @@
+# This playbook creates a test VPC
+# Install ansible on your linux machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+---
+- name: To install pip on webservers and production_server
+  become: yes
+  hosts: project_1
+  tasks:
+  - name: Using yum module
+    yum:
+      name: pip
+      state: present
+
+- name: To install boto3 and botocore packages
+  hosts: ansible_client
+  tasks:
+  - name: Using pip module
+    pip:
+      name: "boto3== 1.15.0"
+      state: present
+  - name: Installing botocore
+    pip:
+      name: "botocore== 1.18.0"
+      state: present
+  - name: Installing boto
+    pip:
+      name: "boto"
+      state: present
+
+- hosts: project_1
+  connection: project_1
+  become: yes
+  tasks:
+    - name: Create vpc
+      ec2_vpc_net:
+        name: "Test.VPC"
+        cidr_block: 172.31.0.0/22
+        region: us-east-1
+        aws_secret_key: "{aws_secret_key}"
+        aws_access_key: "{aws_access_key}"
+        state: present
+        tenancy: dedicated

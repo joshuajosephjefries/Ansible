@@ -1,0 +1,52 @@
+# This playbook installs firefoxand notepad++ on remote windows instance
+# Install ansible on your ansible server machine: yum install ansible
+# Open ports associated to winrm. HTTPS:5986 HTTP:5985
+# Make changes in the host file in /etc/ansible/hosts by adding instance details of host
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <!DOCTYPE yaml>
+-
+    name: Using yum module to install chocolatey
+    hosts: ansible_server
+    tasks:
+      - name: To install chocolatey
+        ansible.builtin.command:
+          cmd: ansible-galaxy collection install chocolatey.chocolatey
+
+      - name: To install win_powershell
+        ansible.builtin.command:
+          cmd: ansible-galaxy collection install ansible.windows
+
+      - name: Using pip module to install pywinrm
+        pip:
+          name: pywinrm
+          state: present
+
+-
+    hosts: win_server
+    tasks:
+      - name: Using powershell to install winrm listener
+        ansible.windows.win_powershell:
+          script: |
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            $url = "https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+            $file = "$env:temp\ConfigureRemotingForAnsible.ps1"
+            (New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)
+            powershell.exe -ExecutionPolicy ByPass -File $file
+            winrm enumerate winrm/config/Listener
+          # Refer https://docs.ansible.com/ansible/latest/user_guide/windows_setup.html
+
+- name: PB to install firefox and notepad++
+  hosts: windows_server
+  tasks:
+  - name: Install firefox
+    win_chocolatey:
+      name: firefox
+      state: present
+  - name: Install notepad++
+    win_chocolatey:
+      name: notepadplusplus
+      state: present

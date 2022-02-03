@@ -1,0 +1,63 @@
+# This PB is to create new security group and add the ingress and egress ports to the new security group
+# First run this PB and then run then run ansible-playbook9-part2.yaml
+# Install ansible on your linux machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+#! <DOCTYPE yaml>
+
+- name: Adding ingress ports for sec group
+  hosts: localhost
+  become: yes
+  vars:
+      aws_access_key: {{Get_access_key_from_IAM}}
+      aws_secret_key: {{Get_secret_key_from_IAM}}
+      my_aws_region: us-east-1
+      my_new_security_group: sg-0778c8753bd11901e # Default security group
+  tasks:
+    - name: Adding security group rules
+      ec2_group:
+        purge_rules: yes
+        name: Creating ports for security group
+        description: TestSecurityGroup
+        aws_access_key: "{{aws_access_key}}"
+        aws_secret_key: "{{aws_secret_key}}"
+        region: "{{my_aws_region}}"
+          # vpc_id: "{{my_vpc_id}}"
+        group_id: "{{my_new_security_group}}"
+        rules:
+            # Allow all on ingress HTTP
+          - proto: tcp
+            to_port: 80
+            from_port: 80
+            cidr_ip: 0.0.0.0/0
+            # Allow all on ingress SSH
+          - proto: tcp
+            to_port: 22
+            from_port: 22
+            cidr_ip: 0.0.0.0/0
+          # Allow all on ingress RDP
+          - proto: tcp
+            to_port: 3389
+            from_port: 3389
+            cidr_ip: 0.0.0.0/0
+
+        rules_egress:
+          # Allow all on egress HTTP
+          - proto: tcp
+            to_port: 80
+            from_port: 80
+            cidr_ip: 0.0.0.0/0
+         # Allow all on ingress SSH
+          - proto: tcp
+            to_port: 22
+            from_port: 22
+            cidr_ip: 0.0.0.0/0
+          # Allow all on egress RDP
+          - proto: tcp
+            to_port: 3389
+            from_port: 3389
+            cidr_ip: 0.0.0.0/0

@@ -1,0 +1,48 @@
+# This playbook is to install a linux instance with newly created security group
+# First run this PB and then run then run ansible-playbook9-part2.yaml
+# Install ansible on your linux machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details
+# Generate the access and secret key from IAM users
+# Make sure you have the key in the Network & Security -> keypair
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+#! <DOCTYPE yaml>
+-
+  name: PB to create linux ec2 instance
+  hosts: localhost
+  vars:
+    my_new_security_group: sg-07137a119249dae1a # New Sec Group
+    my_private_ip: 172.31.12.13
+    my_aws_region: us-east-1
+    my_instance_type: t2.micro
+    my_key_name: Ponnuvel
+    my_image: ami-0aad84f764a2bd39a
+    my_vpc_id: vpc-0bba96be7ff2002a0
+    aws_access_key: {{Get_access_key_from_IAM}}
+    aws_secret_key: {{Get_secret_key_from_IAM}}
+  tasks:
+      - name: Installing pip module
+        yum:
+          name: pip
+          state: present
+      - name: Installing boto, botocore, and boto3 modules
+        pip:
+          name: ["boto", "botocore", "boto3"]
+          state: present
+      - name: Creating Linux_Ansible_client
+        ec2:
+          key_name: Ponnuvel
+          group_id: "{{ my_new_security_group }}"
+          instance_type: t2.micro
+          image: ami-08e4e35cccc6189f4
+          aws_access_key: "{{aws_access_key}}"
+          aws_secret_key: "{{aws_secret_key}}"
+          state: present
+          region: us-east-1
+          instance_tags: {"Name": "Linux_Ansible_Client"}
+          wait: yes
+      - name: Wait for SSH to come up
+        wait_for_connection:
+          delay: 60
+          timeout: 320

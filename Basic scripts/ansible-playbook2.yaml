@@ -1,0 +1,17 @@
+# This playbook installs pip on node
+# Install ansible on your ansible server machine: yum install ansible
+# Make changes in the host file in /etc/ansible/hosts by adding instance details of host
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <!DOCTYPE yaml>
+
+-
+  name: PB to install the pip package
+  hosts: ansible_client
+  become: yes
+  tasks:
+    - name: installing pip package
+      yum:
+        name: pip
+        state: present
