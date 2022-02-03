@@ -1,4 +1,4 @@
-# This playbook creates AMI in and between regions
+# This playbook installs docker on remote windows machine
 # Install ansible on your ansible server machine: yum install ansible
 # Open ports associated to winrm. HTTPS:5986 HTTP:5985
 # Make changes in the host file in /etc/ansible/hosts by adding instance details of host
@@ -26,7 +26,7 @@
         state: present
 
 -
-  name: PB to install adobereader
+  name: PB to install docker
   hosts: win_server
   tasks:
     - name: Using powershell to install winrm listener
