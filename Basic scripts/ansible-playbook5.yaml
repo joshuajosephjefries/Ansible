@@ -1,4 +1,4 @@
-# This playbook installs and starts docker service
+# This playbook installs and starts docker service.
 # Install ansible on your ansible server machine: yum install ansible
 # Make changes in the host file in /etc/ansible/hosts by adding instance details of host
 
