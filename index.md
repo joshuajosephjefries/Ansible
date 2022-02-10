@@ -1,37 +1,66 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/joshuajosephjefries/Ansible/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## ANSIBLE
 
 ```markdown
-Syntax highlighted code block
+Ansible is written in python language. Ansible is a configuration management tool, multi-node deployment, and remote task execution system that works over SSH and does not require any software or daemons to be installed on remote nodes. Extension modules can be written in any language and are transferred to managed machines automatically.
 
-# Header 1
-## Header 2
-### Header 3
+Ansible is also a radically simple IT automation engine that automates cloud provisioning, configuration management, application deployment, intra-service orchestration, and many other IT needs.
 
-- Bulleted
-- List
+Ansible is "agentless", using SSH to push changes from a single source to multiple remote resources. Each play consists of a sequence of "tasks" that launch small programs called "modules" on a specified set of resources in your environment.
 
-1. Numbered
-2. List
+Agentless -> s/w is installed only on server side. Agent based -> s/w is installed on both the server and the client.
 
-**Bold** and _Italic_ and `Code` text
+Pull -> server <---- client Push -> server ----> client
 
-[Link](url) and ![Image](src)
+Ansible works on push mechanism. Writing yml scripts on the server and pushing it to the client (Server side scripting)
+
+Puppet, Chef works on pull mechanism. Writing scripts on the server and pulling it by the client.
+
+Two types of nodes:
+
+    - Control node (server) -> AWS Linux
+    - Managed node (client) -> AWS Linux/ Windows
+
+Requirements for control node:
+
+    - Must have python 3.8 or above versions.
+    - Supported by RHEL, Debian, CentOS, MacOS, BSD
+    - Client and server must be on the same network
+
+Requirements for managed node:
+
+    - Managed nodes do not require deamon to establish a connection but will need SSH to establish a connection
+    - You can manage transfer of modules using the SFTP protocol.
+    - If SSH works and SFTP does not work, go to the link (https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#prerequisites) and SCP the
+      ansible.cfg. Fire the SCP command from the server. Ex: scp /etc/chef/admin.pem root@192.168.43.150:/root/chef-repo/.chef
+
+Ansible should be installed on the server. Scripting is done in any language on ansible server/control node.
+```
+## TERMINOLOGIES
+
+```markdown
+
+Ansible Package: Packaged file containing all the collections (modules and plugins) and the files like python, deb, rpm, etc provides backward compatibility Ansible has different versions 2.10, 3.0 versions: modules and plugins (collections) -> pip install ansible -> ansible-base 2.11, 4.0 versions: more modules and plugins (more collections) -> pip install ansible-core -> ansible-core
+
+Ansible Collections: It is a collection of plugins, roles, modules, playbooks, documentation and more for easy bugfix purpose. Installed from source repositories, from galaxy.ansible.com via ansible-galaxy collection install <namespace.collection> or using a requirements.yml file. Info on requirements.yml and source repos (https://www.ansible.com/blog/ansible-3.0.0-qa)
+
+ansible-base: It contains a minimal amount of modules and plugins and allows other Collections to be installed. Similar to ansible 2.9 version but is called ansible-base in 2.10 version.
+
+Red Hat Ansible Automation Platform Automation platform for ansible to have more collections.
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+[Link] https://www.linkedin.com/in/joseph-jefries/ 
 
-### Jekyll Themes
+## WORKING OF ANSIBLE
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/joshuajosephjefries/Ansible/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+```markdown
 
-### Support or Contact
+    - selects machines to execute against from inventory
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+    - connects to those machines (or network devices, or other managed nodes), usually over SSH
+
+    - copies one or more modules to the remote machines and starts execution there
+```
+
+### Support
+
+Having trouble with scripts? [contact support](https://www.linkedin.com/in/joseph-jefries/) and i’ll help you sort it out.
