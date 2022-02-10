@@ -1,0 +1,15 @@
+# This playbook runs the installation for botocore, boto3 and boto packages.
+# These packages are the prerequisites for amazon ec2 module and are official AWS SDK's for Python
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <! DOCTYPE yaml>
+
+- name: Installation of botocore package
+  command: pip install botocore
+
+- name: Installation of boto3 package
+  command: pip install boto3
+
+- name: Installation of boto package
+  command: pip install boto

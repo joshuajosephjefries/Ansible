@@ -1,0 +1,75 @@
+# This yaml file creates a windows machine by using amazon ec2 module
+# This fetches the keys, image, and region from main.yaml -> vars.yaml
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <! DOCTYPE yaml>
+
+- name: Creating Windows Instance
+  ec2:
+    key_name: Joey
+    instance_type: t2.micro
+    image: "{{my_image}}"
+    aws_access_key: "{{my_aws_access_key}}"
+    aws_secret_key: "{{my_aws_secret_key}}"
+    region: "{{my_region}}"
+    state: present
+    instance_tags: {"Name": "Windows_Client"}
+    group: Windows_Security_Group
+    vpc_subnet_id: "{{my_vpc_subnet_id}}"
+    private_ip: "{{my_ip_address}}"
+
+- name: Wait for instance to change its status
+  wait_for_connection:
+    delay: 60
+    timeout: 320
+
+- name: Installing win.powershell module on localhost
+  command: ansible-galaxy collection install ansible.windows
+
+- name: To get the instance ID
+  command: aws ec2 describe-instances --filters Name=private-ip-address,Values=172.31.13.13
+  register: output1
+
+- name: Printing Instance ID
+  debug:
+    msg: "{{ (output1.stdout | from_json).Reservations[0].Instances[0].InstanceId }}"
+
+# Sometimes it is hard to retrieve the password at the first go. Therefore, launch the windows ec2 instance and generate the password by using Connect button -> RDP -> GetPassword
+# Also, edit the host file in /etc/ansible/hosts
+
+- name: Getting key details
+  command: aws ec2 get-password-data --instance-id  {{(output1.stdout | from_json).Reservations[0].Instances[0].InstanceId}} --priv-launch-key /home/ec2-user/Keys/Joey.pem
+  register: output2
+
+- name: printing Password
+  debug:
+    msg: "{{( output2.stdout | from_json).PasswordData }}"
+
+- name: Editing the host file
+  lineinfile:
+    path: /etc/ansible/hosts
+    line: win ansible_host=172.31.13.13 ansible_connection=winrm ansible_port=5986 ansible_user=Administrator ansible_password={{( output2.stdout | from_json).PasswordData }} ansible_winrm_server_cert_validation=ignore ansible_winrm_kerberos_delegation=true
+
+- name: Installing winrm for remote connectivity
+  command: "{{item}}"
+  loop:
+    - pip install --upgrade --force-reinstall pip==9.0.3
+    - pip install pywinrm --disable-pip-version-check
+    - pip install --upgrade pip
+
+- name: PLEASE PROCEED TO CONFIGURE WINRM ON WINDOWS
+  debug:
+    msg: "Configure winrm listener from https://docs.ansible.com/ansible/latest/user_guide/windows_setup.html#connection-refused-errors"
+
+- name: Checking the connectivity to windows instance
+  command: ansible -i /etc/ansible/hosts win -m win_ping
+  register: output3
+
+- name: Status
+  debug:
+    var: output3.stdout_lines
+
+- name: PLEASE PROCEED TO GET THE PASSWORD
+  debug:
+    msg: "Kindly select the newly created windows instance from AWS console and hit the connect button -> RDP Client -> Password and upload your private keypair. Add the password in the host file"

@@ -1,0 +1,42 @@
+# This play creates a new security group using amazon ec2_group module
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <! DOCTYPE yaml>
+
+- ec2_group:
+    purge_rules: yes
+    name: Windows_Security_Group
+    description: Sec_Group
+    aws_access_key: "{{my_aws_access_key}}"
+    aws_secret_key: "{{my_aws_secret_key}}"
+    region: "{{my_region}}"
+    state: present
+    rules:
+    # Allow HTTP on ingress
+      - proto: tcp
+        to_port: 80
+        from_port: 80
+        cidr_ip: 0.0.0.0/0
+    # Allow SSH on ingress
+      - proto: tcp
+        to_port: 22
+        from_port: 22
+        cidr_ip: 0.0.0.0/0
+    # Allow RDP on ingress
+      - proto: tcp
+        to_port: 3389
+        from_port: 3389
+        cidr_ip: 0.0.0.0/0
+    # Allow winrm on ingress
+      - proto: tcp
+        to_port: 5986
+        from_port: 5986
+        cidr_ip: 0.0.0.0/0
+
+    rules_egress:
+    # Allow all traffic on eggress
+      - proto: all
+        to_port: 10060 # Ignores the port
+        from_port: 10060 # Ignores the port
+        cidr_ip: 0.0.0.0/0

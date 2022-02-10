@@ -1,0 +1,59 @@
+# This playbook contains the ansible yaml code to install devops applications on remote windows instance from ansible Server
+# Requirements for this playbook: chocolatey configured on windows
+# I am using windows.chocolatey and windows powershell modules to install apps
+
+# Configure winrm for communication between ansible server and windows client
+# Follow https://docs.ansible.com/ansible/latest/user_guide/windows_setup.html#connection-refused-errors for more info.
+
+# Download chocolatey in windows instance
+# Command: Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <! DOCTYPE yaml>
+
+
+
+# - name: DOWNLOAD CHOCOLATEY In powershell
+#   debug:
+#     msg: "Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+
+- name: Installing Git
+  win_chocolatey:
+    name: git
+    state: present
+
+- name: Installing firefox
+  win_chocolatey:
+    name: firefox
+    state: present
+
+- name: Installing jenkins
+  win_chocolatey:
+    name: jenkins
+    state: present
+
+- name: Installing maven
+  win_chocolatey:
+    name: maven
+    state: present
+
+- name: Installing visual studio
+  win_chocolatey:
+    name: vscode
+    state: present
+
+- name: Installing docker desktop
+  win_chocolatey:
+    name: docker-desktop
+    state: present
+
+- name: Installing terraform
+  win_chocolatey:
+    name: terraform
+    state: present
+
+- name: Installing kubernetes cli
+  win_chocolatey:
+    name: kubernetes-cli
+    state: present

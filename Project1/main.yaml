@@ -1,0 +1,59 @@
+# This playbook is to create windows instance by importing task from windows_task.yaml
+# I consider AmazonLinux instance to be Ansible Server
+# Install ansible on Ansible Server: sudo amazon-linux-extras install ansible2
+# Install pip on Ansible Server: python3 get-pip.py --user && alternatives --set python /usr/bin/python3.5 && sudo python3 -m pip install ansible && yum install pip
+# Make sure you add the localhost details in /etc/ansible/hosts
+# Configure aws on ansible server: aws configure
+# Enter access key, secret key, region and output: json
+
+#! /bin/env bash
+#! PATH=$PATH:$HOME/.local/bin:$HOME/bin
+# <! DOCTYPE yaml>
+
+---
+- name: Creating a windows instance on AWS cloud provider (Play1)
+  hosts: local
+  become: yes
+  gather_facts: False
+  vars_files:
+    vars.yaml
+  tasks:
+
+    - name: Installing pip on local
+      command: yum install python3-pip -y
+
+    - name: Installing pip
+      command: yum install pip -y
+
+    - name: Installing boto, botocore and boto3
+      import_tasks: Boto_package_installation.yaml
+
+    - name: Installing aws cloud module
+      command: ansible-galaxy collection install community.aws
+
+    - name: Creating a security group for Windows instance
+      import_tasks: security_group.yaml
+
+    - name: Creating Windows Instance
+      import_tasks: windows_task.yaml
+
+    - name: Installing chocolatey module
+      command: ansible-galaxy collection install ansible.windows
+
+
+    - name: Installing chocolatey module for deploying windows applications
+      command: ansible-galaxy collection install chocolatey.chocolatey
+
+
+- name: Installing devops applications on windows instance (Play2)
+  hosts: win
+  gather_facts: False
+  vars_files:
+    vars.yaml
+  tasks:
+    - name: Installing applications
+      import_tasks: apps_on_windows.yaml
+
+    - name: Status of Project1
+      debug:
+        msg: "Project1 is successfully accomplished. We have created a new windows instance and deployed all the devops applications on it"
