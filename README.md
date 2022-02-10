@@ -1,6 +1,6 @@
 # Ansible
 
-<h3>
+<h5>
   
   Ansible is written in python language. 
   Ansible is a configuration management tool, multi-node deployment, and remote task execution system that works over SSH and does not require any software or daemons to be
@@ -24,11 +24,11 @@
   Puppet, Chef works on pull mechanism. 
   Writing scripts on the server and pulling it by the client. 
 
- </h3>
+ </h5>
 
 # Terminologies:
 
-<h3>
+<h5>
   
   1. Ansible Package: 
      Packaged file containing all the collections (modules and plugins) and the files like python, deb, rpm, etc provides backward compatibility
@@ -48,4 +48,4 @@
   4. Red Hat Ansible Automation Platform
      Automation platform for ansible to have more collections. 
 
-  </h3>
+  </h5>
