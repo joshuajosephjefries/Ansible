@@ -31,22 +31,21 @@
 <h3>
   
   1. Ansible Package: 
-  
-  Packaged file containing all the collections (modules and plugins) and the files like python, deb, rpm, etc provides backward compatibility
-  Ansible has different versions
-  2.10, 3.0 versions: modules and plugins (collections) -> pip install ansible -> ansible-base
-  2.11, 4.0 versions: more modules and plugins (more collections) -> pip install ansible-core -> ansible-core
+     Packaged file containing all the collections (modules and plugins) and the files like python, deb, rpm, etc provides backward compatibility
+     Ansible has different versions
+     2.10, 3.0 versions: modules and plugins (collections) -> pip install ansible -> ansible-base
+     2.11, 4.0 versions: more modules and plugins (more collections) -> pip install ansible-core -> ansible-core
   
   2. Ansible Collections: 
-  It is a collection of plugins, roles, modules, playbooks, documentation and more for easy bugfix purpose.
-  Installed from source repositories, from galaxy.ansible.com via ansible-galaxy collection install <namespace.collection> or using a requirements.yml file.
-  Info on requirements.yml and source repos (https://www.ansible.com/blog/ansible-3.0.0-qa)
+     It is a collection of plugins, roles, modules, playbooks, documentation and more for easy bugfix purpose.
+     Installed from source repositories, from galaxy.ansible.com via ansible-galaxy collection install <namespace.collection> or using a requirements.yml file.
+     Info on requirements.yml and source repos (https://www.ansible.com/blog/ansible-3.0.0-qa)
   
   3. ansible-base:
-  It contains a minimal amount of modules and plugins and allows other Collections to be installed.
-  Similar to ansible 2.9 version but is called ansible-base in 2.10 version. 
+     It contains a minimal amount of modules and plugins and allows other Collections to be installed.
+     Similar to ansible 2.9 version but is called ansible-base in 2.10 version. 
   
   4. Red Hat Ansible Automation Platform
-  Automation platform for ansible to have more collections. 
+     Automation platform for ansible to have more collections. 
 
   </h3>
