@@ -23,6 +23,24 @@
   
   Puppet, Chef works on pull mechanism. 
   Writing scripts on the server and pulling it by the client. 
+  
+  Two types of nodes:
+  1. Control node (server) -> AWS Linux
+  2. Managed node (client) -> AWS Linux/ Windows
+  
+  Requirements for control node:
+  1. Must have python 3.8 or above versions. 
+  2. Supported by RHEL, Debian, CentOS, MacOS, BSD 
+  3. Client and server must be on the same network
+  
+  Requirements for managed node: 
+  1. Managed nodes do not require deamon to establish a connection but will need SSH to establish a connection
+  2. You can manage transfer of modules using the SFTP protocol.
+  3. If SSH works and SFTP does not work, go to the link (https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#prerequisites) and SCP the
+  ansible.cfg. Fire the SCP command from the server. 
+  Ex: scp /etc/chef/admin.pem root@192.168.43.150:/root/chef-repo/.chef
+  
+  Ansible should be installed on the server. Scripting is done in any language on ansible server/control node. 
 
  </h5>
 
@@ -49,3 +67,15 @@
      Automation platform for ansible to have more collections. 
 
   </h5>
+
+#  Working of Ansible:
+  
+<h5>
+
+  - selects machines to execute against from inventory
+
+  - connects to those machines (or network devices, or other managed nodes), usually over SSH
+
+  - copies one or more modules to the remote machines and starts execution there
+  
+</h5>
