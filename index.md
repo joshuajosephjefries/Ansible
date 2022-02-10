@@ -48,8 +48,6 @@ ansible-base: It contains a minimal amount of modules and plugins and allows oth
 Red Hat Ansible Automation Platform Automation platform for ansible to have more collections.
 ```
 
-[Link] https://www.linkedin.com/in/joseph-jefries/ 
-
 ## WORKING OF ANSIBLE
 
 ```markdown
@@ -60,6 +58,8 @@ Red Hat Ansible Automation Platform Automation platform for ansible to have more
 
     - copies one or more modules to the remote machines and starts execution there
 ```
+
+[Link] https://www.linkedin.com/in/joseph-jefries/ 
 
 ### Support
 
