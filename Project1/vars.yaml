@@ -1,6 +1,6 @@
 my_image: ami-0aad84f764a2bd39a
-my_aws_access_key: AKIAUVU2B7VC2VZYJUES
-my_aws_secret_key: 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
+my_aws_access_key: {{create_and_copy_access_key_from_IAM}}
+my_aws_secret_key: {{create_and_copy_secret_key_from_IAM}}
 my_region: us-east-1
 my_ip_address: 172.31.13.13
 my_vpc_subnet_id: subnet-0c74ca62f066ae5b0
