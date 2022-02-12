@@ -59,8 +59,6 @@ Red Hat Ansible Automation Platform Automation platform for ansible to have more
     - copies one or more modules to the remote machines and starts execution there
 ```
 
-[Link] https://www.linkedin.com/in/joseph-jefries/ 
-
 ### Support
 
 Having trouble with scripts? [contact support](https://www.linkedin.com/in/joseph-jefries/) and i’ll help you sort it out.
